@@ -46,7 +46,7 @@ Dentro do `<body>`:
 - Um `<h1>` com o texto:
 
 ```
-Conecta Jovem
+ 
 ```
 
 - Um parágrafo explicando o que a ONG faz.
