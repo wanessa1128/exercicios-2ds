@@ -70,3 +70,25 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm install
       - run: npm test
+
+  aula09:
+    name: aula09
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3-bimestre/orientacao-a-objetos/aula09
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install
+      - run: npm test
+
+  aula10:
+    name: aula10
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: 3-bimestre/orientacao-a-objetos/aula10
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install
+      - run: npm test
