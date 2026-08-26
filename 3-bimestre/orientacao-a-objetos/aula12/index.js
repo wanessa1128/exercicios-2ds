@@ -12,7 +12,7 @@ class Usuario {
     }
 }
 
-const usuario1 = new Usuario("Ana dellyn")
+const usuario1 = new Usuario("Ana")
 const usuario2 = new Usuario("Carlos")
 const usuario3 = new Usuario("Maria")
 
