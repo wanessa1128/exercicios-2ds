@@ -1,57 +1,49 @@
-const Notificacao = require("../Notificacao")
-const Factory = require("../Factory")
+const { Email, SMS, App } = require("../notificacao")
+const criar = require("../factory")
 
-test("Deve criar uma notificação por email", () => {
-    const notificacao = Factory.criar("email", "Seu pedido foi aprovado")
+test("Deve enviar uma notificação por e-mail", () => {
+  const notificacao = new Email("Seu pedido foi aprovado")
 
-    expect(notificacao).toBeInstanceOf(Notificacao)
-    expect(notificacao.enviar()).toBe("E-mail enviado: Seu pedido foi aprovado")
+  expect(notificacao.enviar())
+    .toBe("E-mail enviado: Seu pedido foi aprovado")
 })
 
-test("Deve criar uma notificação por SMS", () => {
-    const notificacao = Factory.criar("sms", "Seu pedido foi enviado")
+test("Deve enviar uma notificação por SMS", () => {
+  const notificacao = new SMS("Seu código é 1234")
 
-    expect(notificacao).toBeInstanceOf(Notificacao)
-    expect(notificacao.enviar()).toBe("SMS enviado: Seu pedido foi enviado")
+  expect(notificacao.enviar())
+    .toBe("SMS enviado: Seu código é 1234")
 })
 
-test("Deve criar uma notificação por aplicativo", () => {
-    const notificacao = Factory.criar("app", "Você recebeu uma nova mensagem")
+test("Deve enviar uma notificação pelo aplicativo", () => {
+  const notificacao = new App("Você recebeu uma mensagem")
 
-    expect(notificacao).toBeInstanceOf(Notificacao)
-    expect(notificacao.enviar()).toBe(
-        "Notificação no aplicativo: Você recebeu uma nova mensagem"
-    )
+  expect(notificacao.enviar())
+    .toBe("Notificação no aplicativo: Você recebeu uma mensagem")
 })
 
-test("Diferentes notificações devem possuir comportamentos diferentes", () => {
-    const email = Factory.criar("email", "Olá")
-    const sms = Factory.criar("sms", "Olá")
-    const app = Factory.criar("app", "Olá")
+test("Factory deve criar uma notificação por e-mail", () => {
+  const notificacao = criar("email", "Olá")
 
-    expect(email.enviar()).not.toBe(sms.enviar())
-    expect(sms.enviar()).not.toBe(app.enviar())
-    expect(email.enviar()).not.toBe(app.enviar())
+  expect(notificacao.enviar())
+    .toBe("E-mail enviado: Olá")
 })
 
-test("A Factory deve criar o tipo correto de notificação", () => {
-    const email = Factory.criar("email", "Teste")
-    const sms = Factory.criar("sms", "Teste")
-    const app = Factory.criar("app", "Teste")
+test("Factory deve criar uma notificação por SMS", () => {
+  const notificacao = criar("sms", "Olá")
 
-    expect(email.constructor.name).toBe("Email")
-    expect(sms.constructor.name).toBe("SMS")
-    expect(app.constructor.name).toBe("App")
+  expect(notificacao.enviar())
+    .toBe("SMS enviado: Olá")
 })
 
-test("Deve gerar erro ao solicitar um tipo inválido", () => {
-    expect(() => {
-        Factory.criar("telegram", "Teste")
-    }).toThrow("Tipo de notificação inválido")
+test("Factory deve criar uma notificação pelo aplicativo", () => {
+  const notificacao = criar("app", "Olá")
+
+  expect(notificacao.enviar())
+    .toBe("Notificação no aplicativo: Olá")
 })
 
-test("A mensagem deve ser armazenada na notificação", () => {
-    const notificacao = Factory.criar("email", "Mensagem de teste")
-
-    expect(notificacao.mensagem).toBe("Mensagem de teste")
+test("Deve lançar erro para tipo inválido", () => {
+  expect(() => criar("telegram", "Olá"))
+    .toThrow("Tipo de notificação inválido")
 })
