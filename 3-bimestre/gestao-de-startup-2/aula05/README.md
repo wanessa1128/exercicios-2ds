@@ -206,6 +206,17 @@ _
 Para cada situação, indique qual reunião seria mais adequada:
 
 1. A equipe precisa decidir quais tarefas serão realizadas na próxima Sprint.
+
+R= Planning (O momento em que o time planeja o trabalho que será executado na Sprint).
+
 2. Um desenvolvedor quer informar que está bloqueado por um problema.
+
+R= Daily (A reunião diária curta ideal para sinalizar impedimentos e alinhar o dia).
+
 3. A equipe terminou uma Sprint e precisa apresentar o que desenvolveu.
+
+R= Review (O momento de demonstrar o produto e o valor entregue para as partes interessadas).
+
 4. A equipe percebeu que houve problemas de comunicação durante a Sprint e quer descobrir como melhorar.
+
+R= Retrospectiva (Reunião focada no processo interno e no comportamento da equipe para promover melhoria contínua).
