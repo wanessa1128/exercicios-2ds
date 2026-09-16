@@ -317,3 +317,6 @@ Identifique cada uma:
 - MVP
 - MLP
 - MMP
+  R = Situação A: MVP (Produto Mínimo Viável) — Foco apenas na funcionalidade mínima necessária para testar e validar o uso.
+      Situação B: MLP (Produto Mínimo Adorável) — Vai além do básico, focando em melhorar a experiência e encantar o usuário.
+      Situação C: MMP (Produto Mínimo Comercializável) — Versão completa e estável, pronta para ser lançada e oferecida no mercado.
