@@ -204,5 +204,14 @@ Você acredita que três desses campos não são necessários e podem tornar o c
 Responda:
 
 1. Você simplesmente implementaria os cinco campos?
+
+R= Não,não simplemente implementaria os cincos campos sem antes conversar com a equipe.
+
 2. O que deveria fazer antes?
+
+R= Antes de sair programando, eu procuraria entender qual é o objetivo de coletar esses dados adicionais e analisaria o impacto que um cadastro mais longo pode trazer para a experiência do usuário, como o risco de pessoas desistirem no meio do caminho.
+
 3. Como poderia apresentar sua preocupação à equipe?
+
+R= Eu apresentaria minha preocupação de forma construtiva e focada na experiência do usuário, dizendo algo como:
+   "Entendo a necessidade de coletar mais informações, mas adicionar cinco campos de uma vez pode deixar o cadastro cansativo e fazer com que os usuários abandonem a página. Notei que três desses campos não parecem essenciais para este momento. Que tal lançarmos apenas     com os dois mais importantes para testar e, se realmente sentirmos falta do restante, adicionamos depois?"
