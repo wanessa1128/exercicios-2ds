@@ -219,5 +219,14 @@ Ela possui um protótipo simples desenhado em papel.
 Crie:
 
 1. Uma tarefa que será dada ao usuário.
+
+R= "Imagine a seguinte situação: você acabou de receber um trabalho de História com entrega agendada para a próxima sexta-feira. Utilizando o protótipo no papel, navegue pelas telas e me mostre qual seria o seu passo a passo para cadastrar essa nova tarefa no sistema."
+
 2. Duas coisas que a equipe deverá observar.
+
+R= Facilidade de navegação:Se o usuário identifica de primeira o botão de adicionar tarefa ou se precisa ficar procurando e pensando muito antes de tomar uma ação.
+   Pontos de travamento:Em que momento ele hesita, demonstra dúvida, clica no lugar errado ou tenta fazer um caminho diferente do que a equipe planejou.
+   
 3. Uma pergunta para fazer depois do teste.
+
+   R= "Qual foi a etapa mais confusa durante o processo e o que você mudaria no desenho da tela para tornar essa ação mais simples?"
