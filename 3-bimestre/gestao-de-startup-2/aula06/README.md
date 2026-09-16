@@ -240,5 +240,15 @@ A equipe consegue realizar apenas **três tarefas** nesta Sprint.
 ### Perguntas
 
 1. Quais três tarefas você escolheria?
+
+R= Eu escolheria as tarefas de A,E e C 
+
 2. Por que elas devem ter prioridade?
+
+R= Tarefas A e E (Corrigir erros de login e de perda de dados): Têm prioridade máxima porque são bloqueantes e críticas. Um erro que impede o login deixa o sistema inutilizável, e a perda de dados gera um impacto altíssimo e afeta diretamente a confiança do usuário.
+   Tarefa C (Recuperação de senha): É uma funcionalidade essencial de acesso e segurança, afetando diretamente a usabilidade do produto.
+   Tarefas B e D (Cor de botão e animação): São melhorias estéticas que não resolvem problemas críticos, por isso podem ser adiadas para as próximas Sprints.
+
 3. Qual seria um possível objetivo para essa Sprint?
+
+R= "Garantir a estabilidade, segurança e o acesso contínuo dos usuários ao sistema."
