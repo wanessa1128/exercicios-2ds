@@ -128,6 +128,17 @@ _
 Classifique cada situação como **Produto** ou **Projeto**.
 
 1. Desenvolvimento de uma nova funcionalidade para um aplicativo.
+
+R= Possui início, meio e fim definidos; o trabalho encerra assim que a funcionalidade é entregue.
+
 2. Plataforma de cursos utilizada por milhares de alunos.
+
+R= É o sistema que continua existindo e gerando valor diariamente para os usuários.
+
 3. Construção de um sistema para uma empresa.
-4. Aplicativo de delivery utilizado diariamente pelos clientes.
+
+R= Representa o esforço temporário de planejamento e criação antes da entrega final.
+
+4. Aplicativo de delivery utilizado diariamente pelos clientes.  
+
+R= É a solução lançada no mercado que é usada continuamente e recebe melhorias ao longo do tempo.
