@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node servidor.js",
+    "dev": "node --watch --env-file=.env servidor.js"
   },
   "keywords": [],
   "author": "",

@@ -6,7 +6,7 @@ Você entrou na equipe de tecnologia da **cinema**, que mantém vários sistemas
 
 Hoje, quando alguém pergunta se o sistema está funcionando, a resposta vem de alguém abrindo o navegador e olhando. Se o sistema cair num domingo, ninguém descobre até segunda.
 
-A equipe decidiu que todo sistema vai expor um **servidor de status**: um endereço simples que qualquer pessoa — ou qualquer programa de monitoramento — consulta para saber se o serviço está no ar e em que configuração ele está rodando.
+A equipe decidiu que todo sistema vai expor um **servidor de status**: um endereço simples que qualquer pessoa — ou qualquer programa de monitoramento — consulta para saber se o serviço está no ar e em que con[text](package.json)figuração ele está rodando.
 
 Como esse servidor roda em máquinas diferentes (a da equipe, a de testes e a de produção), **nada pode ficar escrito no código**: nome do serviço, porta e ambiente vêm de variáveis de ambiente.
 
