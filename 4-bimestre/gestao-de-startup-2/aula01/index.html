@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f4ed" />
+    <title>Estudaí | Pesquisa NPS</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #202b27;
+        --muted: #66716b;
+        --paper: #f4f4ed;
+        --surface: #fffefa;
+        --line: #dce1d8;
+        --green: #176b50;
+        --green-dark: #104b39;
+        --mint: #e1f0e8;
+        --orange: #d56b3e;
+        --danger: #c52d37;
+        --danger-soft: #fff0ef;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background-color: var(--paper);
+        background-image: radial-gradient(#d4ddcf 0.8px, transparent 0.8px);
+        background-size: 18px 18px;
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      }
+
+      main {
+        width: min(100% - 32px, 760px);
+        margin: 0 auto;
+        padding: 54px 0 48px;
+        animation: arrive 450ms ease-out both;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--green);
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 600px;
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        font-weight: 500;
+        line-height: 1.02;
+      }
+
+      .intro {
+        max-width: 590px;
+        margin: 18px 0 30px;
+        color: var(--muted);
+        font-size: 1.05rem;
+        line-height: 1.6;
+      }
+
+      .survey, .results, .funnel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+
+      .survey { padding: clamp(20px, 5vw, 32px); }
+
+      .survey h2, .results h2, .funnel h2 {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+
+      .funnel { margin: 22px 0 18px; padding: clamp(20px, 5vw, 28px); }
+
+      .funnel-intro {
+        margin: 8px 0 18px;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      .stage-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .stage-action {
+        min-height: 42px;
+        padding: 0 14px;
+        border-color: var(--green);
+        color: var(--green-dark);
+        background: white;
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .stage-action:hover:not(:disabled) { color: white; background: var(--green); }
+      .stage-action:disabled { cursor: not-allowed; opacity: 0.55; }
+
+      .funnel-stats {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .funnel-step {
+        min-width: 0;
+        padding: 12px 10px;
+        border-top: 3px solid var(--line);
+        background: #f7f8f3;
+      }
+
+      .funnel-step.largest-drop {
+        border-color: var(--danger);
+        color: #8f1d26;
+        background: var(--danger-soft);
+      }
+
+      .funnel-step-name {
+        display: block;
+        min-height: 2.5em;
+        color: var(--muted);
+        font-size: 0.76rem;
+        line-height: 1.25;
+      }
+
+      .funnel-step.largest-drop .funnel-step-name { color: #8f1d26; }
+
+      .funnel-count {
+        display: block;
+        margin-top: 6px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.65rem;
+        line-height: 1;
+      }
+
+      .funnel-rate {
+        display: block;
+        margin-top: 7px;
+        color: var(--muted);
+        font-size: 0.75rem;
+      }
+
+      .largest-drop .funnel-rate { color: #8f1d26; font-weight: 700; }
+
+      .drop-marker {
+        display: inline-block;
+        margin-top: 7px;
+        padding: 3px 5px;
+        border-radius: 3px;
+        color: white;
+        background: var(--danger);
+        font-size: 0.64rem;
+        font-weight: 800;
+        line-height: 1.2;
+      }
+
+      .question {
+        margin: 8px 0 22px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .score-label {
+        display: block;
+        margin-bottom: 9px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .form-row {
+        display: flex;
+        gap: 10px;
+      }
+
+      select, button {
+        min-height: 48px;
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        font: inherit;
+      }
+
+      select {
+        width: 110px;
+        padding: 0 12px;
+        color: var(--ink);
+        background: white;
+      }
+
+      button { cursor: pointer; }
+
+      .submit {
+        flex: 1;
+        padding: 0 18px;
+        border-color: var(--green);
+        color: white;
+        background: var(--green);
+        font-weight: 700;
+        transition: background 150ms ease, transform 150ms ease;
+      }
+
+      .submit:hover { background: var(--green-dark); }
+      .submit:active { transform: translateY(1px); }
+
+      :focus-visible {
+        outline: 3px solid var(--orange);
+        outline-offset: 3px;
+      }
+
+      .feedback {
+        min-height: 1.4em;
+        margin: 12px 0 0;
+        color: var(--green-dark);
+        font-size: 0.9rem;
+      }
+
+      .results { margin-top: 18px; padding: clamp(20px, 5vw, 28px); }
+
+      .results-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .total { color: var(--muted); font-size: 0.9rem; }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .metric {
+        min-width: 0;
+        padding: 14px 12px;
+        border-top: 3px solid var(--line);
+        background: #f7f8f3;
+      }
+
+      .metric.promoters { border-color: var(--green); }
+      .metric.neutrals { border-color: #d6a43c; }
+      .metric.detractors { border-color: var(--orange); }
+      .metric.nps { border-color: var(--ink); background: var(--mint); }
+
+      .metric-label {
+        display: block;
+        min-height: 2.5em;
+        color: var(--muted);
+        font-size: 0.78rem;
+        line-height: 1.25;
+      }
+
+      .metric-value {
+        display: block;
+        margin-top: 7px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.8rem;
+        line-height: 1;
+      }
+
+      .results-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .formula { margin: 0; color: var(--muted); font-size: 0.83rem; }
+
+      .clear {
+        min-height: 36px;
+        padding: 0 10px;
+        border-color: transparent;
+        color: var(--muted);
+        background: transparent;
+        font-size: 0.84rem;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      .clear:hover { color: var(--orange); }
+
+      @keyframes arrive {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @media (max-width: 520px) {
+        main { padding-top: 34px; }
+        .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .metric-label { min-height: 0; }
+        .funnel-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .funnel-step-name { min-height: 0; }
+        .results-head, .results-foot { align-items: flex-start; }
+        .results-foot { flex-direction: column; gap: 8px; }
+        .clear { padding-left: 0; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">Pesquisa de recomendação</p>
+      <h1>Estudaí</h1>
+      <p class="intro">O Estudaí organiza seus horários e transforma um tempinho livre em progresso nos estudos.</p>
+
+      <section class="funnel" aria-labelledby="funnel-title">
+        <h2 id="funnel-title">Funil AARRR</h2>
+        <p class="funnel-intro">Acompanhe quantas visitas avançam por cada etapa. As conversões comparam cada etapa à anterior.</p>
+        <div class="stage-actions" aria-label="Etapas do funil">
+          <button class="stage-action" id="try-button" type="button">Experimentar</button>
+          <button class="stage-action" id="return-button" type="button" hidden>Quero usar de novo</button>
+          <button class="stage-action" id="pay-button" type="button" hidden>Eu pagaria por isso</button>
+        </div>
+        <div class="funnel-stats" aria-live="polite">
+          <div class="funnel-step" id="step-acquisition"><span class="funnel-step-name">Aquisição<br />abriu a página</span><strong class="funnel-count" id="funnel-acquisition">0</strong><span class="funnel-rate">Visitas</span></div>
+          <div class="funnel-step" id="step-activation"><span class="funnel-step-name">Ativação<br />experimentou</span><strong class="funnel-count" id="funnel-activation">0</strong><span class="funnel-rate" id="rate-activation">—</span><span class="drop-marker" id="drop-activation" hidden>Maior queda</span></div>
+          <div class="funnel-step" id="step-retention"><span class="funnel-step-name">Retenção<br />voltaria a usar</span><strong class="funnel-count" id="funnel-retention">0</strong><span class="funnel-rate" id="rate-retention">—</span><span class="drop-marker" id="drop-retention" hidden>Maior queda</span></div>
+          <div class="funnel-step" id="step-revenue"><span class="funnel-step-name">Receita<br />pagaria pelo app</span><strong class="funnel-count" id="funnel-revenue">0</strong><span class="funnel-rate" id="rate-revenue">—</span><span class="drop-marker" id="drop-revenue" hidden>Maior queda</span></div>
+          <div class="funnel-step" id="step-referral"><span class="funnel-step-name">Recomendação<br />nota 9 ou 10</span><strong class="funnel-count" id="funnel-referral">0</strong><span class="funnel-rate" id="rate-referral">—</span><span class="drop-marker" id="drop-referral" hidden>Maior queda</span></div>
+        </div>
+      </section>
+
+      <section class="survey" aria-labelledby="survey-title">
+        <h2 id="survey-title">Sua opinião ajuda a melhorar</h2>
+        <p class="question">De 0 a 10, quanto você recomendaria este app para um amigo?</p>
+        <form id="nps-form">
+          <label class="score-label" for="score">Sua nota</label>
+          <div class="form-row">
+            <select id="score" name="score" required aria-label="Escolha uma nota de 0 a 10">
+              <option value="" selected disabled>Nota</option>
+            </select>
+            <button class="submit" type="submit">Enviar resposta</button>
+          </div>
+          <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="results" aria-labelledby="results-title">
+        <div class="results-head">
+          <h2 id="results-title">Resultado da pesquisa</h2>
+          <span class="total" id="total">0 respostas</span>
+        </div>
+        <div class="metrics" aria-live="polite">
+          <div class="metric promoters"><span class="metric-label">Promotores<br />9 e 10</span><strong class="metric-value" id="promoters">0</strong></div>
+          <div class="metric neutrals"><span class="metric-label">Neutros<br />7 e 8</span><strong class="metric-value" id="neutrals">0</strong></div>
+          <div class="metric detractors"><span class="metric-label">Detratores<br />0 a 6</span><strong class="metric-value" id="detractors">0</strong></div>
+          <div class="metric nps"><span class="metric-label">NPS final</span><strong class="metric-value" id="nps">—</strong></div>
+        </div>
+        <div class="results-foot">
+          <p class="formula">NPS = % de promotores − % de detratores</p>
+          <button class="clear" id="clear" type="button">Limpar dados</button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const STORAGE_KEY = "estudai-nps-responses";
+      const FUNNEL_STORAGE_KEY = "estudai-aarrr-funnel";
+      const form = document.querySelector("#nps-form");
+      const scoreInput = document.querySelector("#score");
+      const feedback = document.querySelector("#feedback");
+      const clearButton = document.querySelector("#clear");
+      const tryButton = document.querySelector("#try-button");
+      const returnButton = document.querySelector("#return-button");
+      const payButton = document.querySelector("#pay-button");
+      let currentVisit = null;
+
+      for (let score = 0; score <= 10; score += 1) {
+        const option = document.createElement("option");
+        option.value = String(score);
+        option.textContent = String(score);
+        scoreInput.append(option);
+      }
+
+      function readResponses() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          return Array.isArray(saved) ? saved.filter((score) => Number.isInteger(score) && score >= 0 && score <= 10) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function renderResults() {
+        const responses = readResponses();
+        const promoters = responses.filter((score) => score >= 9).length;
+        const neutrals = responses.filter((score) => score >= 7 && score <= 8).length;
+        const detractors = responses.filter((score) => score <= 6).length;
+        const total = responses.length;
+        const nps = total === 0 ? "—" : Math.round(((promoters - detractors) / total) * 100);
+
+        document.querySelector("#promoters").textContent = String(promoters);
+        document.querySelector("#neutrals").textContent = String(neutrals);
+        document.querySelector("#detractors").textContent = String(detractors);
+        document.querySelector("#nps").textContent = String(nps);
+        document.querySelector("#total").textContent = `${total} ${total === 1 ? "resposta" : "respostas"}`;
+      }
+
+      function readFunnelVisits() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(FUNNEL_STORAGE_KEY) || "[]");
+          return Array.isArray(saved)
+            ? saved.filter((visit) => visit && typeof visit.id === "string").map((visit) => ({
+                id: visit.id,
+                activated: Boolean(visit.activated),
+                retained: Boolean(visit.retained),
+                revenue: Boolean(visit.revenue),
+                promoterScore: Boolean(visit.promoterScore),
+                referred: Boolean(visit.referred && visit.revenue && visit.promoterScore),
+              }))
+            : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function renderFunnel() {
+        const visits = readFunnelVisits();
+        const steps = [
+          { id: "acquisition", key: null },
+          { id: "activation", key: "activated" },
+          { id: "retention", key: "retained" },
+          { id: "revenue", key: "revenue" },
+          { id: "referral", key: "referred" },
+        ];
+        const counts = steps.map((step) => step.key === null ? visits.length : visits.filter((visit) => visit[step.key]).length);
+        let largestDrop = -1;
+        let largestDropId = null;
+
+        steps.forEach((step, index) => {
+          if (index === 0) return;
+          const previousCount = counts[index - 1];
+          const conversion = previousCount === 0 ? null : Math.min(100, (counts[index] / previousCount) * 100);
+          document.querySelector(`#rate-${step.id}`).textContent = conversion === null ? "Sem etapa anterior" : `${Math.round(conversion)}% de conversão`;
+          if (conversion !== null && 100 - conversion > largestDrop) {
+            largestDrop = 100 - conversion;
+            largestDropId = step.id;
+          }
+        });
+
+        steps.forEach((step, index) => {
+          document.querySelector(`#funnel-${step.id}`).textContent = String(counts[index]);
+          if (index === 0) return;
+          document.querySelector(`#step-${step.id}`).classList.toggle("largest-drop", step.id === largestDropId);
+          document.querySelector(`#drop-${step.id}`).hidden = step.id !== largestDropId;
+        });
+
+        tryButton.hidden = Boolean(currentVisit?.activated);
+        tryButton.disabled = !currentVisit;
+        returnButton.hidden = !currentVisit?.activated || Boolean(currentVisit?.retained);
+        returnButton.disabled = !currentVisit;
+        payButton.hidden = !currentVisit?.retained || Boolean(currentVisit?.revenue);
+        payButton.disabled = !currentVisit;
+      }
+
+      function updateCurrentVisit(stage) {
+        if (!currentVisit) return;
+        const visits = readFunnelVisits();
+        const visit = visits.find((item) => item.id === currentVisit.id);
+        if (!visit) return;
+        visit[stage] = true;
+        visit.referred = Boolean(visit.revenue && visit.promoterScore);
+        localStorage.setItem(FUNNEL_STORAGE_KEY, JSON.stringify(visits));
+        currentVisit = visit;
+        renderFunnel();
+      }
+
+      function startVisit() {
+        const visits = readFunnelVisits();
+        currentVisit = {
+          id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          activated: false,
+          retained: false,
+          revenue: false,
+          promoterScore: false,
+          referred: false,
+        };
+        visits.push(currentVisit);
+        localStorage.setItem(FUNNEL_STORAGE_KEY, JSON.stringify(visits));
+      }
+
+      tryButton.addEventListener("click", () => updateCurrentVisit("activated"));
+      returnButton.addEventListener("click", () => updateCurrentVisit("retained"));
+      payButton.addEventListener("click", () => updateCurrentVisit("revenue"));
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!scoreInput.value) return;
+
+        const responses = readResponses();
+        responses.push(Number(scoreInput.value));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+        if (Number(scoreInput.value) >= 9) updateCurrentVisit("promoterScore");
+        renderResults();
+        feedback.textContent = "Resposta registrada. Obrigado!";
+        scoreInput.value = "";
+      });
+
+      clearButton.addEventListener("click", () => {
+        if (!confirm("Apagar todos os dados salvos neste navegador?")) return;
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(FUNNEL_STORAGE_KEY);
+        currentVisit = null;
+        feedback.textContent = "Dados apagados. Atualize a página para iniciar uma nova visita.";
+        renderResults();
+        renderFunnel();
+      });
+
+      startVisit();
+      renderResults();
+      renderFunnel();
+    </script>
+  </body>
+</html>
