@@ -1,15 +1,15 @@
 {
   "name": "aula01",
   "version": "1.0.0",
-  "description": "Entender o que é o npm e para que ele serve. Criar e ler um arquivo package.json. Diferenciar dependências de dependências de desenvolvimento. Criar scripts personalizados e executá-los com npm run.",
+  "description": "Exercicio da aula 01",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
     "jest": "^30.4.2"
   }
