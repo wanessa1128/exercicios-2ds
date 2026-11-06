@@ -27,7 +27,7 @@ router.get("/:id", (req, res, next) => {
     const lavagem = lavagens.find((l) => l.id === Number(req.params.id))
 
     if (!lavagem) {
-        const erro = new Error("Lavagem nao enontrado")
+        const erro = new Error("Lavagem nao encontrado")
         erro.status = 404
         return next(erro)
     }

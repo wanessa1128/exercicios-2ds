@@ -1,4 +1,4 @@
-const express =("expess")
+const express = require("express")
 const lavagensRouter = require("./routes/lavagens")
 
 const app = express()
@@ -14,4 +14,4 @@ app.use((req, res) => {
         res.status(erro.status || 500).json({ erro: erro.message })
     })
 
-   modulo.express = app
+   module.exports = app

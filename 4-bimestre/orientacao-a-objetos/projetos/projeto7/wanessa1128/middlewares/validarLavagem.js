@@ -1,5 +1,5 @@
 function validarLavagem(req, res, next) {
-    const { mpotorista, pacote, valor } = req.body || {}
+    const { motorista, pacote, valor } = req.body || {}
 
     let mensagem = null
 
