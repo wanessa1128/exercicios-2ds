@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedido de ajuda - Aula 6</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f5f7fb;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; }
+    button, input, textarea { font: inherit; }
+
+    .page {
+      width: min(100% - 2rem, 980px);
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    header { margin-bottom: 1.5rem; }
+    .eyebrow {
+      margin: 0 0 0.4rem;
+      color: #5145cd;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    h1, h2, p { margin-top: 0; }
+    h1 { margin-bottom: 0.5rem; font-size: clamp(2rem, 6vw, 3.2rem); letter-spacing: -0.05em; }
+    h2 { margin-bottom: 0.75rem; font-size: 1.25rem; }
+    .intro { max-width: 720px; color: #58647b; line-height: 1.6; }
+
+    .card {
+      margin-top: 1rem;
+      padding: clamp(1rem, 4vw, 1.5rem);
+      border: 1px solid #e3e7f0;
+      border-radius: 1rem;
+      background: #fff;
+      box-shadow: 0 8px 24px rgb(23 32 51 / 4%);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      color: #39445a;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .full { grid-column: 1 / -1; }
+    input, textarea {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #cbd1de;
+      border-radius: 0.6rem;
+      background: #fff;
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    input:focus, textarea:focus {
+      border-color: #5145cd;
+      outline: 3px solid #dcd9ff;
+    }
+
+    .hint { color: #657087; font-size: 0.78rem; font-weight: 400; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.65rem; margin-top: 1rem; }
+    button {
+      min-height: 44px;
+      padding: 0.7rem 1rem;
+      border: 0;
+      border-radius: 0.7rem;
+      color: #fff;
+      background: #5145cd;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:hover { background: #4034b5; }
+    button:focus-visible { outline: 3px solid #9a92ff; outline-offset: 3px; }
+    button:disabled { color: #657087; background: #e5e8f0; cursor: not-allowed; }
+    .secondary { border: 1px solid #cbd1de; color: #39445a; background: #fff; }
+    .secondary:hover { background: #f5f7fb; }
+
+    .status {
+      min-height: 1.4em;
+      margin: 0.8rem 0 0;
+      color: #58647b;
+    }
+    .error { color: #a32132; font-weight: 700; }
+    .success { color: #246b45; font-weight: 700; }
+
+    pre {
+      white-space: pre-wrap;
+      margin: 0.75rem 0 0;
+      padding: 1rem;
+      border-left: 4px solid #5145cd;
+      border-radius: 0.5rem;
+      background: #f3f2ff;
+      color: #26324a;
+      line-height: 1.55;
+    }
+    [hidden] { display: none !important; }
+
+    @media (max-width: 680px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .full { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">Aula 6 · Comunicação remota</p>
+      <h1>Pedido de ajuda completo</h1>
+      <p class="intro">Preencha os cinco campos para transformar um problema real em uma mensagem clara. O envio fica bloqueado enquanto algum campo estiver vazio ou estiver faltando evidência sobre o que já foi tentado.</p>
+    </header>
+
+    <section class="card" aria-labelledby="help-title">
+      <h2 id="help-title">1. Construa o pedido</h2>
+      <form id="help-form" novalidate>
+        <div class="form-grid">
+          <label class="full">
+            O que eu quero fazer
+            <input id="goal" name="goal" maxlength="300" required placeholder="Ex.: cadastrar um novo pedido na API">
+          </label>
+
+          <label>
+            O que está acontecendo
+            <textarea id="problem" name="problem" maxlength="700" required placeholder="Ex.: a requisição retorna 500 em vez de 201"></textarea>
+          </label>
+
+          <label>
+            Onde
+            <textarea id="location" name="location" maxlength="500" required placeholder="Ex.: routes/pedidos.js, linha 14"></textarea>
+          </label>
+
+          <label class="full">
+            O que eu já tentei
+            <span class="hint">Escreva pelo menos 20 caracteres e inclua resultados concretos.</span>
+            <textarea id="attempts" name="attempts" minlength="20" maxlength="1000" required placeholder="Ex.: conferi o corpo no Insomnia e adicionei console.log no req.body"></textarea>
+          </label>
+
+          <label class="full">
+            O que preciso de você
+            <textarea id="need" name="need" maxlength="500" required placeholder="Ex.: confirmar se falta middleware express.json() no app"></textarea>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Montar pedido</button>
+          <button class="secondary" type="reset">Limpar</button>
+        </div>
+        <p id="form-status" class="status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div id="result" hidden>
+        <h2>Mensagem pronta</h2>
+        <pre id="formatted-message"></pre>
+        <div class="actions">
+          <button id="copy-message" type="button">Copiar mensagem</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="response-title">
+      <h2 id="response-title">2. Registre a resposta da atividade</h2>
+      <form id="response-form">
+        <div class="form-grid">
+          <label class="full">
+            O colega precisou perguntar algo? O que faltava?
+            <textarea id="questions" required placeholder="Escreva não, se não fez perguntas; ou explique o que faltava no pedido."></textarea>
+          </label>
+
+          <label class="full">
+            Feedback recebido no formato situação → comportamento → impacto
+            <textarea id="feedback" required placeholder="Na entrega..., o pedido..., e isso fez com que..."></textarea>
+          </label>
+
+          <label class="full">
+            Uma coisa que vou mudar no próximo pedido
+            <textarea id="change" required placeholder="Ex.: incluir o resultado exato do console.log."></textarea>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="submit">Montar respostas</button>
+          <button class="secondary" type="reset">Limpar</button>
+          <button id="copy-response" class="secondary" type="button" hidden>Copiar respostas</button>
+        </div>
+        <p id="response-status" class="status" role="status" aria-live="polite"></p>
+        <pre id="response-output" hidden></pre>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const helpForm = document.getElementById("help-form");
+      const formStatus = document.getElementById("form-status");
+      const result = document.getElementById("result");
+      const formattedMessage = document.getElementById("formatted-message");
+
+      function fieldValue(id) {
+        return document.getElementById(id).value.trim();
+      }
+
+      function clearStatus(element) {
+        element.textContent = "";
+        element.className = "status";
+      }
+
+      helpForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const goal = fieldValue("goal");
+        const problem = fieldValue("problem");
+        const location = fieldValue("location");
+        const attempts = fieldValue("attempts");
+        const need = fieldValue("need");
+
+        if (!goal || !problem || !location || !attempts || !need) {
+          formStatus.textContent = "Pedido bloqueado: todos os cinco campos são obrigatórios.";
+          formStatus.className = "status error";
+          result.hidden = true;
+          return;
+        }
+
+        if (attempts.length < 20) {
+          formStatus.textContent = `Pedido bloqueado: “O que já tentei” precisa de pelo menos 20 caracteres. Você escreveu ${attempts.length}.`;
+          formStatus.className = "status error";
+          document.getElementById("attempts").focus();
+          result.hidden = true;
+          return;
+        }
+
+        formattedMessage.textContent =
+          `Quero fazer: ${goal}\n\n` +
+          `O que está acontecendo: ${problem}\n\n` +
+          `Onde: ${location}\n\n` +
+          `O que já tentei: ${attempts}\n\n` +
+          `Preciso de você: ${need}`;
+        formStatus.textContent = "Pedido completo: pronto para enviar ao colega.";
+        formStatus.className = "status success";
+        result.hidden = false;
+      });
+
+      helpForm.addEventListener("reset", () => {
+        window.setTimeout(() => {
+          clearStatus(formStatus);
+          result.hidden = true;
+          formattedMessage.textContent = "";
+        }, 0);
+      });
+
+      document.getElementById("copy-message").addEventListener("click", async () => {
+        await copyText(formattedMessage.textContent, formStatus, "Pedido copiado.");
+      });
+
+      async function copyText(text, statusElement, successMessage) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (error) {
+          const textarea = document.createElement("textarea");
+          textarea.value = text;
+          textarea.style.position = "fixed";
+          textarea.style.opacity = "0";
+          document.body.append(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          textarea.remove();
+        }
+        statusElement.textContent = successMessage;
+        statusElement.className = "status success";
+      }
+
+      const responseForm = document.getElementById("response-form");
+      const responseStatus = document.getElementById("response-status");
+      const responseOutput = document.getElementById("response-output");
+      const copyResponse = document.getElementById("copy-response");
+
+      responseForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const questions = fieldValue("questions");
+        const feedback = fieldValue("feedback");
+        const change = fieldValue("change");
+
+        if (!questions || !feedback || !change) {
+          responseStatus.textContent = "Preencha todas as respostas da atividade.";
+          responseStatus.className = "status error";
+          responseOutput.hidden = true;
+          copyResponse.hidden = true;
+          return;
+        }
+
+        responseOutput.textContent =
+          `O colega precisou perguntar algo?\n${questions}\n\n` +
+          `Feedback recebido\n${feedback}\n\n` +
+          `Uma coisa que vou mudar no próximo pedido\n${change}`;
+        responseStatus.textContent = "Respostas registradas.";
+        responseStatus.className = "status success";
+        responseOutput.hidden = false;
+        copyResponse.hidden = false;
+      });
+
+      responseForm.addEventListener("reset", () => {
+        window.setTimeout(() => {
+          clearStatus(responseStatus);
+          responseOutput.hidden = true;
+          responseOutput.textContent = "";
+          copyResponse.hidden = true;
+        }, 0);
+      });
+
+      copyResponse.addEventListener("click", async () => {
+        await copyText(responseOutput.textContent, responseStatus, "Respostas copiadas.");
+      });
+    })();
+  </script>
+</body>
+</html>
