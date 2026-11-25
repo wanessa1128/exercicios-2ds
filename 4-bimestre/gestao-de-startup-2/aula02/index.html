@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Foco — tarefas sem complicação</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f5f7fb;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      min-height: 44px;
+      padding: 0.7rem 1rem;
+      border: 0;
+      border-radius: 0.7rem;
+      color: #fff;
+      background: #5145cd;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      background: #4034b5;
+    }
+
+    button:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #9a92ff;
+      outline-offset: 3px;
+    }
+
+    button:disabled {
+      color: #657087;
+      background: #e5e8f0;
+      cursor: not-allowed;
+    }
+
+    .page {
+      width: min(100% - 2rem, 920px);
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.4rem;
+      color: #5145cd;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      letter-spacing: -0.05em;
+    }
+
+    h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.25rem;
+    }
+
+    .intro {
+      max-width: 650px;
+      margin-bottom: 0;
+      color: #58647b;
+      line-height: 1.6;
+    }
+
+    .card {
+      margin-top: 1rem;
+      padding: clamp(1rem, 4vw, 1.5rem);
+      border: 1px solid #e3e7f0;
+      border-radius: 1rem;
+      background: #fff;
+      box-shadow: 0 8px 24px rgb(23 32 51 / 4%);
+    }
+
+    .steps {
+      display: grid;
+      gap: 0.75rem;
+      margin: 1.25rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 1px solid #e8ebf2;
+      border-radius: 0.8rem;
+    }
+
+    .step h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1rem;
+    }
+
+    .step p {
+      margin: 0;
+      color: #657087;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .nps-control {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    select {
+      min-height: 44px;
+      padding: 0.5rem;
+      border: 1px solid #cbd1de;
+      border-radius: 0.6rem;
+      background: #fff;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 0.8rem 0.65rem;
+      border-bottom: 1px solid #e8ebf2;
+      white-space: nowrap;
+    }
+
+    th {
+      color: #657087;
+      font-size: 0.8rem;
+    }
+
+    .drop-row {
+      color: #a32132;
+      background: #fff0f1;
+      font-weight: 700;
+    }
+
+    .drop-summary {
+      margin: 1rem 0 0;
+      padding: 0.9rem 1rem;
+      border-left: 4px solid #5145cd;
+      border-radius: 0.4rem;
+      background: #f3f2ff;
+      line-height: 1.5;
+    }
+
+    .drop-summary.is-alert {
+      border-color: #c6283d;
+      color: #8e1d2c;
+      background: #fff0f1;
+    }
+
+    .muted,
+    .status {
+      color: #657087;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .status {
+      min-height: 1.4em;
+      margin: 0.8rem 0 0;
+    }
+
+    .error {
+      color: #a32132;
+      font-weight: 700;
+    }
+
+    .card-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .secondary {
+      border: 1px solid #cbd1de;
+      color: #39445a;
+      background: #fff;
+    }
+
+    .secondary:hover:not(:disabled) {
+      background: #f5f7fb;
+    }
+
+    footer {
+      margin-top: 1.5rem;
+      color: #657087;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 560px) {
+      .step {
+        grid-template-columns: 1fr;
+      }
+
+      .step button,
+      .nps-control {
+        width: 100%;
+      }
+
+      .nps-control select {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">App de exemplo · gestão de startup</p>
+      <h1>Foco</h1>
+      <p class="intro">Organize suas tarefas em poucos minutos e deixe mais espaço para o que importa. Experimente o fluxo e, se quiser, conte o que achou.</p>
+    </header>
+
+    <section class="card" aria-labelledby="experience-title">
+      <h2 id="experience-title">Experimente o app</h2>
+      <p class="muted">Siga apenas as etapas que fizerem sentido para você. Não é preciso clicar em tudo.</p>
+      <ol class="steps">
+        <li class="step">
+          <div>
+            <h3>1. Aquisição</h3>
+            <p>Você chegou à página do Foco. Essa visita já foi contabilizada.</p>
+          </div>
+          <span aria-label="Etapa contabilizada">✓</span>
+        </li>
+        <li class="step">
+          <div>
+            <h3>2. Ativação</h3>
+            <p>Experimente a primeira ação importante: criar sua primeira tarefa.</p>
+          </div>
+          <button type="button" data-stage="activation">Experimentar</button>
+        </li>
+        <li class="step">
+          <div>
+            <h3>3. Retenção</h3>
+            <p>Depois de experimentar, diga se voltaria para organizar outra tarefa.</p>
+          </div>
+          <button type="button" data-stage="retention" disabled>Quero usar de novo</button>
+        </li>
+        <li class="step">
+          <div>
+            <h3>4. Receita</h3>
+            <p>Se voltaria a usar, conte se pagaria por uma versão completa.</p>
+          </div>
+          <button type="button" data-stage="revenue" disabled>Eu pagaria por isso</button>
+        </li>
+        <li class="step">
+          <div>
+            <h3>5. Recomendação</h3>
+            <p>Se chegou até aqui, dê uma nota. Apenas notas 9 ou 10 contam como recomendação.</p>
+          </div>
+          <div class="nps-control">
+            <label for="nps-score">Nota de 0 a 10</label>
+            <select id="nps-score" aria-label="Nota de recomendação" disabled>
+              <option value="">Escolha</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <button type="button" id="submit-nps" disabled>Enviar nota</button>
+          </div>
+        </li>
+      </ol>
+      <p class="status" id="experience-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="metrics-title">
+      <div class="card-heading">
+        <div>
+          <h2 id="metrics-title">Funil AARRR</h2>
+          <p class="muted">Os números ficam salvos neste navegador para a coleta da turma.</p>
+        </div>
+        <button class="secondary" type="button" id="reset-data">Zerar dados da coleta</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Etapa</th>
+              <th scope="col">Pessoas</th>
+              <th scope="col">Conversão da etapa anterior</th>
+              <th scope="col">Queda da etapa anterior</th>
+            </tr>
+          </thead>
+          <tbody id="funnel-data"></tbody>
+        </table>
+      </div>
+      <p class="drop-summary" id="drop-summary" role="status" aria-live="polite"></p>
+      <p class="status" id="storage-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <footer>
+      A aquisição conta uma visita por sessão do navegador. As demais etapas contam no máximo uma vez por sessão; uma nota abaixo de 9 não entra em Recomendação.
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const DATA_KEY = "foco-aarrr-data-v1";
+      const SESSION_KEY = "foco-aarrr-session-v1";
+      const initialCounts = {
+        acquisition: 0,
+        activation: 0,
+        retention: 0,
+        revenue: 0,
+        recommendation: 0
+      };
+      const stages = [
+        { key: "acquisition", label: "Aquisição" },
+        { key: "activation", label: "Ativação" },
+        { key: "retention", label: "Retenção" },
+        { key: "revenue", label: "Receita" },
+        { key: "recommendation", label: "Recomendação" }
+      ];
+      const funnelBody = document.getElementById("funnel-data");
+      const dropSummary = document.getElementById("drop-summary");
+      const storageStatus = document.getElementById("storage-status");
+      const experienceStatus = document.getElementById("experience-status");
+      const activationButton = document.querySelector('[data-stage="activation"]');
+      const retentionButton = document.querySelector('[data-stage="retention"]');
+      const revenueButton = document.querySelector('[data-stage="revenue"]');
+      const npsScore = document.getElementById("nps-score");
+      const submitNps = document.getElementById("submit-nps");
+      let counts;
+      let journey;
+      let storageAvailable = true;
+
+      function isValidCounts(value) {
+        return value && stages.every(({ key }) =>
+          Number.isSafeInteger(value[key]) && value[key] >= 0
+        );
+      }
+
+      function isValidJourney(value) {
+        return value
+          && typeof value.acquisition === "boolean"
+          && typeof value.activation === "boolean"
+          && typeof value.retention === "boolean"
+          && typeof value.revenue === "boolean"
+          && typeof value.recommendation === "boolean";
+      }
+
+      function readJson(storage, key, fallback, validator) {
+        const saved = storage.getItem(key);
+        if (saved === null) return fallback;
+        const parsed = JSON.parse(saved);
+        if (!validator(parsed)) throw new Error("Os dados salvos estão em formato inválido.");
+        return parsed;
+      }
+
+      function saveCounts() {
+        localStorage.setItem(DATA_KEY, JSON.stringify(counts));
+      }
+
+      function saveJourney() {
+        sessionStorage.setItem(SESSION_KEY, JSON.stringify(journey));
+      }
+
+      function setError(message) {
+        storageAvailable = false;
+        storageStatus.textContent = message;
+        storageStatus.classList.add("error");
+        [activationButton, retentionButton, revenueButton, npsScore, submitNps].forEach((control) => {
+          control.disabled = true;
+        });
+      }
+
+      function formatPercent(numerator, denominator) {
+        if (denominator === 0) return "—";
+        return `${((numerator / denominator) * 100).toFixed(1)}%`;
+      }
+
+      function renderMetrics() {
+        funnelBody.replaceChildren();
+        let largestDrop = null;
+
+        stages.forEach((stage, index) => {
+          const previous = index === 0 ? null : stages[index - 1];
+          const previousCount = previous ? counts[previous.key] : null;
+          const count = counts[stage.key];
+          const drop = previousCount > 0 ? ((previousCount - count) / previousCount) * 100 : null;
+          const row = document.createElement("tr");
+          if (drop !== null && (largestDrop === null || drop > largestDrop.drop)) {
+            largestDrop = { stage, previous, drop, previousCount, count, row };
+          }
+          row.innerHTML = `
+            <th scope="row">${stage.label}</th>
+            <td>${count}</td>
+            <td>${previous ? formatPercent(count, previousCount) : "—"}</td>
+            <td>${previous ? formatPercent(previousCount - count, previousCount) : "—"}</td>
+          `;
+          funnelBody.append(row);
+          if (largestDrop && largestDrop.row === row) row.classList.add("drop-row");
+        });
+
+        if (largestDrop) {
+          funnelBody.querySelectorAll("tr").forEach((row) => row.classList.remove("drop-row"));
+          largestDrop.row.classList.add("drop-row");
+          dropSummary.classList.add("is-alert");
+          dropSummary.textContent =
+            `Maior queda: ${largestDrop.stage.label} — ${largestDrop.previousCount - largestDrop.count} de ${largestDrop.previousCount} pessoas não avançaram (${largestDrop.drop.toFixed(1)}%).`;
+        } else {
+          dropSummary.classList.remove("is-alert");
+          dropSummary.textContent = "Ainda não há uma etapa com dados suficientes para calcular a queda.";
+        }
+      }
+
+      function renderJourney() {
+        activationButton.disabled = journey.activation || !storageAvailable;
+        retentionButton.disabled = !journey.activation || journey.retention || !storageAvailable;
+        revenueButton.disabled = !journey.retention || journey.revenue || !storageAvailable;
+        npsScore.disabled = !journey.revenue || journey.recommendation || !storageAvailable;
+        submitNps.disabled = !journey.revenue || journey.recommendation || !storageAvailable;
+      }
+
+      function recordStage(key) {
+        if (!storageAvailable || journey[key]) return;
+        counts[key] += 1;
+        journey[key] = true;
+        try {
+          saveCounts();
+          saveJourney();
+          renderMetrics();
+          renderJourney();
+          experienceStatus.textContent = "Etapa registrada. Obrigado por participar!";
+        } catch (error) {
+          counts[key] -= 1;
+          journey[key] = false;
+          setError(`Não foi possível salvar sua resposta: ${error.message}`);
+        }
+      }
+
+      try {
+        counts = readJson(localStorage, DATA_KEY, { ...initialCounts }, isValidCounts);
+        journey = readJson(sessionStorage, SESSION_KEY, {
+          acquisition: false,
+          activation: false,
+          retention: false,
+          revenue: false,
+          recommendation: false
+        }, isValidJourney);
+
+        if (!journey.acquisition) {
+          counts.acquisition += 1;
+          journey.acquisition = true;
+          saveCounts();
+          saveJourney();
+        }
+
+        activationButton.addEventListener("click", () => recordStage("activation"));
+        retentionButton.addEventListener("click", () => recordStage("retention"));
+        revenueButton.addEventListener("click", () => recordStage("revenue"));
+        submitNps.addEventListener("click", () => {
+          if (!npsScore.value) {
+            experienceStatus.textContent = "Escolha uma nota antes de enviar.";
+            return;
+          }
+          const score = Number(npsScore.value);
+          if (score >= 9) {
+            recordStage("recommendation");
+          } else {
+            journey.recommendation = true;
+            try {
+              saveJourney();
+              renderJourney();
+              experienceStatus.textContent = "Nota registrada. A recomendação conta apenas notas 9 ou 10.";
+            } catch (error) {
+              journey.recommendation = false;
+              setError(`Não foi possível salvar sua resposta: ${error.message}`);
+            }
+          }
+        });
+        document.getElementById("reset-data").addEventListener("click", () => {
+          if (!window.confirm("Zerar os números desta coleta neste navegador?")) return;
+          try {
+            counts = { ...initialCounts };
+            journey = {
+              acquisition: true,
+              activation: false,
+              retention: false,
+              revenue: false,
+              recommendation: false
+            };
+            saveCounts();
+            saveJourney();
+            counts.acquisition = 1;
+            saveCounts();
+            npsScore.value = "";
+            experienceStatus.textContent = "Dados zerados. Esta nova sessão foi contada como aquisição.";
+            renderMetrics();
+            renderJourney();
+          } catch (error) {
+            setError(`Não foi possível zerar os dados: ${error.message}`);
+          }
+        });
+
+        renderMetrics();
+        renderJourney();
+      } catch (error) {
+        counts = { ...initialCounts };
+        journey = {
+          acquisition: false,
+          activation: false,
+          retention: false,
+          revenue: false,
+          recommendation: false
+        };
+        renderMetrics();
+        renderJourney();
+        setError(`Não foi possível carregar os dados salvos: ${error.message}`);
+      }
+    })();
+  </script>
+</body>
+</html>
