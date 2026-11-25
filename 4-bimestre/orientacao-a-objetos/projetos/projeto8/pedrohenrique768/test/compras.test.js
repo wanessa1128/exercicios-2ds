@@ -57,16 +57,16 @@ test("os registros devem persistir na ordem de insercao", async () => {
 test("atualizar deve devolver o registro com o campo alterado", async () => {
     await semear()
 
-    expect(await atualizar(1, { status: "entregue" })).toEqual({ id: 1, cliente: "Ana", produto: "Arroz", valor: 28, status: "entregue" })
+    expect(await atualizar(1, { status: "cancelada" })).toEqual({ id: 1, cliente: "Ana", produto: "Arroz", valor: 28, status: "cancelada" })
 })
 
 test("atualizar deve preservar os campos nao enviados", async () => {
     await semear()
-    await atualizar(2, { status: "entregue" })
+    await atualizar(2, { status: "cancelada" })
 
     const lista = await listar()
 
-    expect(lista[1]).toEqual({ ...REG_2, status: "entregue" })
+    expect(lista[1]).toEqual({ ...REG_2, status: "cancelada" })
 })
 
 test("atualizar deve gravar a alteracao no arquivo", async () => {
@@ -81,7 +81,7 @@ test("atualizar deve gravar a alteracao no arquivo", async () => {
 test("atualizar deve devolver null para um id inexistente", async () => {
     await semear()
 
-    expect(await atualizar(99, { status: "entregue" })).toBe(null)
+    expect(await atualizar(99, { status: "cancelada" })).toBe(null)
 })
 
 // RF - repositorio: remover

@@ -52,12 +52,12 @@ O repositório deve exportar também:
 | `atualizar(id, dados)` | mescla os `dados` no registro daquele `id`, grava e devolve o registro atualizado; devolve **`null`** se o id não existir |
 | `remover(id)` | remove o registro daquele `id` e grava; devolve **`true`** se removeu e **`false`** se o id não existia |
 
-⚠️ No `atualizar`, os campos **não enviados** precisam ser preservados. Enviar apenas `{ status: "entregue" }` não pode apagar o `cliente`, o `produto` nem o `valor`.
+⚠️ No `atualizar`, os campos **não enviados** precisam ser preservados. Enviar apenas `{ status: "cancelada" }` não pode apagar o `cliente`, o `produto` nem o `valor`.
 
 ```
-atualizar(1, { status: "entregue" })
+atualizar(1, { status: "cancelada" })
 
-// { id: 1, cliente: "Ana", produto: "Dipirona", valor: 12, status: "entregue" }
+// { id: 1, cliente: "Ana", produto: "Dipirona", valor: 12, status: "cancelada" }
 ```
 
 💡 **Você já fez quase tudo isso nas aulas:** o `listar` e o `salvar` são os da aula 14, o `atualizar` é o da aula 15 e o `remover` é o da aula 16. Reaproveite o código dos exercícios, trocando `contatos` pelos seus registros e `ARQUIVO_CONTATOS` por `ARQUIVO_VENDAS`.
