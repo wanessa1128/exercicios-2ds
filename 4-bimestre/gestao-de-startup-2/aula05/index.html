@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>Prioriza — backlog do app</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #172033;
+      background: #f5f7fb;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      min-height: 42px;
+      padding: 0.65rem 0.9rem;
+      border: 0;
+      border-radius: 0.65rem;
+      color: #fff;
+      background: #5145cd;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      background: #4034b5;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid #9a92ff;
+      outline-offset: 2px;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 42px;
+      padding: 0.6rem 0.7rem;
+      border: 1px solid #cbd1de;
+      border-radius: 0.6rem;
+      background: #fff;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    label {
+      display: grid;
+      gap: 0.35rem;
+      color: #39445a;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .page {
+      width: min(100% - 2rem, 1040px);
+      margin: 0 auto;
+      padding: 2rem 0 3rem;
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.4rem;
+      color: #5145cd;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      letter-spacing: -0.05em;
+    }
+
+    h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .intro,
+    .muted {
+      color: #58647b;
+      line-height: 1.6;
+    }
+
+    .intro {
+      max-width: 700px;
+      margin-bottom: 0;
+    }
+
+    .card {
+      margin-top: 1rem;
+      padding: clamp(1rem, 4vw, 1.5rem);
+      border: 1px solid #e3e7f0;
+      border-radius: 1rem;
+      background: #fff;
+      box-shadow: 0 8px 24px rgb(23 32 51 / 4%);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+      align-items: end;
+      margin-top: 1rem;
+    }
+
+    .form-grid .title-field {
+      grid-column: span 4;
+    }
+
+    .adr-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .actions,
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .toolbar {
+      justify-content: space-between;
+    }
+
+    .secondary {
+      border: 1px solid #cbd1de;
+      color: #39445a;
+      background: #fff;
+    }
+
+    .secondary:hover:not(:disabled) {
+      background: #f5f7fb;
+    }
+
+    .danger {
+      border: 1px solid #e6b7bd;
+      color: #a32132;
+      background: #fff;
+    }
+
+    .danger:hover:not(:disabled) {
+      background: #fff0f1;
+    }
+
+    .status {
+      min-height: 1.4em;
+      margin: 0.8rem 0 0;
+      color: #58647b;
+      line-height: 1.5;
+    }
+
+    .error {
+      color: #a32132;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th,
+    td {
+      padding: 0.8rem 0.65rem;
+      border-bottom: 1px solid #e8ebf2;
+      vertical-align: middle;
+    }
+
+    th {
+      color: #657087;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    td:first-child {
+      min-width: 220px;
+      font-weight: 700;
+    }
+
+    .rank {
+      width: 2rem;
+      color: #657087;
+      font-weight: 700;
+    }
+
+    .rice {
+      color: #4034b5;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .category {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 99px;
+      background: #eef0f6;
+      font-size: 0.8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .category-must {
+      color: #8e1d2c;
+      background: #fff0f1;
+    }
+
+    .category-should {
+      color: #79500a;
+      background: #fff5dc;
+    }
+
+    .category-could {
+      color: #225d47;
+      background: #e6f6ed;
+    }
+
+    .category-wont {
+      color: #58647b;
+      background: #edf0f5;
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 0.4rem;
+    }
+
+    .row-actions button {
+      min-height: 34px;
+      padding: 0.35rem 0.55rem;
+      font-size: 0.8rem;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .summary-item {
+      padding: 0.8rem;
+      border-radius: 0.7rem;
+      background: #f3f2ff;
+      line-height: 1.45;
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: #4034b5;
+    }
+
+    .adr-preview {
+      overflow-x: auto;
+      min-height: 3rem;
+      padding: 1rem;
+      border: 1px solid #e3e7f0;
+      border-radius: 0.7rem;
+      background: #f8f9fc;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+
+    .empty {
+      padding: 1rem;
+      color: #657087;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .form-grid .title-field {
+        grid-column: span 2;
+      }
+
+      .summary {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid .title-field {
+        grid-column: auto;
+      }
+
+      .adr-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <p class="eyebrow">Aula 5 · priorização de produto</p>
+      <h1>Prioriza</h1>
+      <p class="intro">Organize o backlog do seu app com MoSCoW e compare as ideias pelo RICE simplificado: (alcance × impacto) ÷ esforço. Os dados ficam salvos neste navegador.</p>
+    </header>
+
+    <section class="card" aria-labelledby="form-title">
+      <h2 id="form-title">Adicionar item ao backlog</h2>
+      <p class="muted">Use o alcance medido nas aulas 1 e 2. Impacto vai de 1 (baixo) a 3 (alto); esforço é estimado em horas.</p>
+      <form id="backlog-form">
+        <div class="adr-grid">
+          <label class="title-field" for="item-title">
+            Título do item
+            <input id="item-title" name="title" type="text" maxlength="120" placeholder="Ex.: melhorar a tela inicial" required>
+          </label>
+          <label for="item-category">
+            MoSCoW
+            <select id="item-category" name="category" required>
+              <option value="must">Must</option>
+              <option value="should">Should</option>
+              <option value="could">Could</option>
+              <option value="wont">Won't</option>
+            </select>
+          </label>
+          <label for="item-reach">
+            Alcance (pessoas)
+            <input id="item-reach" name="reach" type="number" min="0" step="1" value="0" required>
+          </label>
+          <label for="item-impact">
+            Impacto (1 a 3)
+            <select id="item-impact" name="impact" required>
+              <option value="1">1 — baixo</option>
+              <option value="2">2 — médio</option>
+              <option value="3">3 — alto</option>
+            </select>
+          </label>
+          <label for="item-effort">
+            Esforço (horas)
+            <input id="item-effort" name="effort" type="number" min="0.01" step="0.01" value="1" required>
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit" id="save-item">Adicionar ao backlog</button>
+          <button class="secondary" type="button" id="cancel-edit" hidden>Cancelar edição</button>
+        </div>
+      </form>
+      <p class="status" id="form-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="backlog-title">
+      <div class="toolbar">
+        <div>
+          <h2 id="backlog-title">Backlog priorizado</h2>
+          <p class="muted">Ordem do maior para o menor RICE. Won't permanece visível, mas indica o que não entra agora.</p>
+        </div>
+        <button class="danger" type="button" id="clear-backlog">Limpar backlog</button>
+      </div>
+      <div class="summary" id="top-three" aria-label="Três maiores prioridades"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Item</th>
+              <th scope="col">MoSCoW</th>
+              <th scope="col">Alcance</th>
+              <th scope="col">Impacto</th>
+              <th scope="col">Esforço (h)</th>
+              <th scope="col">RICE</th>
+              <th scope="col">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="backlog-rows"></tbody>
+        </table>
+      </div>
+      <p class="status" id="storage-status" role="status" aria-live="polite"></p>
+    </section>
+
+    <section class="card" aria-labelledby="adr-title">
+      <h2 id="adr-title">Rascunho de ADR para a prioridade #1</h2>
+      <p class="muted">Descreva por que a equipe escolheu o item que está no topo do backlog. O título e o RICE são preenchidos com a prioridade atual.</p>
+      <form id="adr-form">
+        <div class="form-grid">
+          <label for="adr-context">
+            Contexto
+            <textarea id="adr-context" name="context" placeholder="Qual problema ou oportunidade os dados mostram?" required></textarea>
+          </label>
+          <label for="adr-decision">
+            Decisão
+            <textarea id="adr-decision" name="decision" placeholder="O que a equipe decidiu fazer?" required></textarea>
+          </label>
+          <label for="adr-consequences">
+            Consequências
+            <textarea id="adr-consequences" name="consequences" placeholder="O que se ganha e a que se renuncia?" required></textarea>
+          </label>
+          <label for="adr-status">
+            Status
+            <select id="adr-status" name="status">
+              <option value="proposta">Proposta</option>
+              <option value="aceita">Aceita</option>
+              <option value="substituída">Substituída</option>
+            </select>
+          </label>
+        </div>
+        <div class="actions">
+          <button type="submit">Gerar ADR</button>
+        </div>
+      </form>
+      <pre class="adr-preview" id="adr-preview" aria-live="polite">Preencha os campos para gerar o registro da decisão.</pre>
+    </section>
+
+    <footer class="muted">
+      Os dois itens de demonstração conferem o cálculo da aula: RICE 300 e 3,75. Edite ou remova-os ao montar o backlog real do seu app.
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "prioriza-backlog-v1";
+      const categoryLabels = {
+        must: "Must",
+        should: "Should",
+        could: "Could",
+        wont: "Won't"
+      };
+      const sampleItems = [
+        {
+          id: "demo-bug",
+          title: "Corrigir erro 500 ao cadastrar pedido sem nome",
+          category: "must",
+          reach: 200,
+          impact: 3,
+          effort: 2
+        },
+        {
+          id: "demo-pdf",
+          title: "Exportar relatório em PDF",
+          category: "wont",
+          reach: 15,
+          impact: 2,
+          effort: 8
+        }
+      ];
+      const form = document.getElementById("backlog-form");
+      const formStatus = document.getElementById("form-status");
+      const storageStatus = document.getElementById("storage-status");
+      const rows = document.getElementById("backlog-rows");
+      const topThree = document.getElementById("top-three");
+      const saveButton = document.getElementById("save-item");
+      const cancelEditButton = document.getElementById("cancel-edit");
+      const adrForm = document.getElementById("adr-form");
+      const adrPreview = document.getElementById("adr-preview");
+      let items = [];
+      let editingId = null;
+      let storageAvailable = true;
+
+      function isValidItems(value) {
+        return Array.isArray(value)
+          && value.every((item) =>
+            item
+            && typeof item.id === "string"
+            && typeof item.title === "string"
+            && item.title.trim().length > 0
+            && Object.prototype.hasOwnProperty.call(categoryLabels, item.category)
+            && Number.isSafeInteger(item.reach)
+            && item.reach >= 0
+            && Number.isInteger(item.impact)
+            && item.impact >= 1
+            && item.impact <= 3
+            && Number.isFinite(item.effort)
+            && item.effort > 0
+          );
+      }
+
+      function readItems() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved === null) return sampleItems.map((item) => ({ ...item }));
+        const parsed = JSON.parse(saved);
+        if (!isValidItems(parsed)) throw new Error("Os itens salvos estão em formato inválido.");
+        return parsed;
+      }
+
+      function rice(item) {
+        return (item.reach * item.impact) / item.effort;
+      }
+
+      function sortedItems() {
+        return [...items].sort((a, b) => rice(b) - rice(a) || a.title.localeCompare(b.title, "pt-BR"));
+      }
+
+      function formatNumber(value) {
+        return Number.isInteger(value)
+          ? value.toLocaleString("pt-BR")
+          : value.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
+      }
+
+      function formatRice(value) {
+        return Number.isInteger(value)
+          ? value.toLocaleString("pt-BR")
+          : value.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+
+      function setStorageError(message) {
+        storageAvailable = false;
+        storageStatus.textContent = message;
+        storageStatus.classList.add("error");
+        form.querySelectorAll("button, input, select").forEach((control) => {
+          control.disabled = true;
+        });
+        document.getElementById("clear-backlog").disabled = true;
+      }
+
+      function commit(nextItems, successMessage) {
+        if (!storageAvailable) return false;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextItems));
+          items = nextItems;
+          render();
+          storageStatus.textContent = successMessage;
+          storageStatus.classList.remove("error");
+          return true;
+        } catch (error) {
+          storageStatus.textContent = `Não foi possível salvar as alterações: ${error.message}`;
+          storageStatus.classList.add("error");
+          return false;
+        }
+      }
+
+      function makeCell(text, className) {
+        const cell = document.createElement("td");
+        if (className) cell.className = className;
+        cell.textContent = text;
+        return cell;
+      }
+
+      function render() {
+        const sorted = sortedItems();
+        rows.replaceChildren();
+        topThree.replaceChildren();
+
+        if (sorted.length === 0) {
+          const row = document.createElement("tr");
+          const cell = document.createElement("td");
+          cell.colSpan = 8;
+          cell.className = "empty";
+          cell.textContent = "Seu backlog está vazio. Adicione uma ideia para começar.";
+          row.append(cell);
+          rows.append(row);
+        } else {
+          sorted.forEach((item, index) => {
+            const row = document.createElement("tr");
+            row.append(makeCell(String(index + 1), "rank"));
+            row.append(makeCell(item.title));
+            const categoryCell = document.createElement("td");
+            const badge = document.createElement("span");
+            badge.className = `category category-${item.category}`;
+            badge.textContent = categoryLabels[item.category];
+            categoryCell.append(badge);
+            row.append(categoryCell);
+            row.append(makeCell(formatNumber(item.reach)));
+            row.append(makeCell(String(item.impact)));
+            row.append(makeCell(formatNumber(item.effort)));
+            row.append(makeCell(formatRice(rice(item)), "rice"));
+
+            const actionsCell = document.createElement("td");
+            const actions = document.createElement("div");
+            actions.className = "row-actions";
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.className = "secondary";
+            editButton.textContent = "Editar";
+            editButton.setAttribute("aria-label", `Editar: ${item.title}`);
+            editButton.addEventListener("click", () => startEdit(item));
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.className = "danger";
+            removeButton.textContent = "Excluir";
+            removeButton.setAttribute("aria-label", `Excluir: ${item.title}`);
+            removeButton.addEventListener("click", () => removeItem(item));
+            actions.append(editButton, removeButton);
+            actionsCell.append(actions);
+            row.append(actionsCell);
+            rows.append(row);
+          });
+        }
+
+        sorted.slice(0, 3).forEach((item, index) => {
+          const summary = document.createElement("div");
+          summary.className = "summary-item";
+          const priority = document.createElement("strong");
+          priority.textContent = `#${index + 1} · RICE ${formatRice(rice(item))}`;
+          const title = document.createElement("span");
+          title.textContent = item.title;
+          summary.append(priority, title);
+          topThree.append(summary);
+        });
+
+        if (sorted.length === 0) {
+          const empty = document.createElement("p");
+          empty.className = "muted";
+          empty.textContent = "As três maiores prioridades aparecerão aqui.";
+          topThree.append(empty);
+        }
+      }
+
+      function resetForm() {
+        form.reset();
+        document.getElementById("item-reach").value = "0";
+        document.getElementById("item-impact").value = "1";
+        document.getElementById("item-effort").value = "1";
+        editingId = null;
+        saveButton.textContent = "Adicionar ao backlog";
+        cancelEditButton.hidden = true;
+        document.getElementById("form-title").textContent = "Adicionar item ao backlog";
+      }
+
+      function startEdit(item) {
+        editingId = item.id;
+        document.getElementById("item-title").value = item.title;
+        document.getElementById("item-category").value = item.category;
+        document.getElementById("item-reach").value = String(item.reach);
+        document.getElementById("item-impact").value = String(item.impact);
+        document.getElementById("item-effort").value = String(item.effort);
+        saveButton.textContent = "Salvar alterações";
+        cancelEditButton.hidden = false;
+        document.getElementById("form-title").textContent = "Editar item do backlog";
+        document.getElementById("item-title").focus();
+      }
+
+      function removeItem(item) {
+        if (!window.confirm(`Excluir "${item.title}" do backlog?`)) return;
+        const nextItems = items.filter((candidate) => candidate.id !== item.id);
+        if (commit(nextItems, "Item excluído.")) {
+          if (editingId === item.id) resetForm();
+        }
+      }
+
+      function makeId() {
+        return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!form.reportValidity() || !storageAvailable) return;
+
+        const title = document.getElementById("item-title").value.trim();
+        const reach = Number(document.getElementById("item-reach").value);
+        const impact = Number(document.getElementById("item-impact").value);
+        const effort = Number(document.getElementById("item-effort").value);
+        const category = document.getElementById("item-category").value;
+        if (!title || !Number.isSafeInteger(reach) || reach < 0 || ![1, 2, 3].includes(impact) || !Number.isFinite(effort) || effort <= 0) {
+          formStatus.textContent = "Confira o título, alcance, impacto e esforço antes de salvar.";
+          formStatus.classList.add("error");
+          return;
+        }
+
+        const wasEditing = Boolean(editingId);
+        const item = { id: editingId || makeId(), title, category, reach, impact, effort };
+        const nextItems = editingId
+          ? items.map((candidate) => candidate.id === editingId ? item : candidate)
+          : [...items, item];
+        if (commit(nextItems, wasEditing ? "Alterações salvas." : "Item adicionado ao backlog.")) {
+          resetForm();
+          formStatus.textContent = wasEditing ? "Item atualizado." : "Item cadastrado e priorizado pelo RICE.";
+          formStatus.classList.remove("error");
+        }
+      });
+
+      cancelEditButton.addEventListener("click", () => {
+        resetForm();
+        formStatus.textContent = "Edição cancelada.";
+        formStatus.classList.remove("error");
+      });
+
+      document.getElementById("clear-backlog").addEventListener("click", () => {
+        if (!window.confirm("Remover todos os itens deste backlog?")) return;
+        if (commit([], "Backlog limpo.")) {
+          resetForm();
+          formStatus.textContent = "";
+        }
+      });
+
+      adrForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!adrForm.reportValidity()) return;
+        const first = sortedItems()[0];
+        if (!first) {
+          adrPreview.textContent = "Adicione um item ao backlog antes de registrar a decisão.";
+          return;
+        }
+        const context = document.getElementById("adr-context").value.trim();
+        const decision = document.getElementById("adr-decision").value.trim();
+        const consequences = document.getElementById("adr-consequences").value.trim();
+        const status = document.getElementById("adr-status").value;
+        const date = new Date().toLocaleDateString("pt-BR");
+        adrPreview.textContent = [
+          `# ADR — ${first.title}`,
+          "",
+          `Data: ${date}`,
+          `Status: ${status}`,
+          `Prioridade RICE: ${formatRice(rice(first))}`,
+          "",
+          "## Contexto",
+          context,
+          "",
+          "## Decisão",
+          decision,
+          "",
+          "## Consequências",
+          consequences
+        ].join("\n");
+      });
+
+      try {
+        items = readItems();
+        if (localStorage.getItem(STORAGE_KEY) === null) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+        }
+        render();
+      } catch (error) {
+        items = [];
+        render();
+        setStorageError(`Não foi possível carregar o backlog salvo: ${error.message}`);
+      }
+    })();
+  </script>
+</body>
+</html>
